@@ -33,6 +33,9 @@ def extract_json_from_text(text):
     elif cleaned.startswith("```"):
         cleaned = cleaned[3:]
     
+    if cleaned.endswith("```"):
+        cleaned = cleaned[:-3]
+    
     cleaned = cleaned.strip()
     
     try:
@@ -243,6 +246,18 @@ Pokud stránka vůbec nesouvisí se studiem, nastav is_relevant na false a match
             
             analyzed_count += 1
             
+            # Be more lenient - include anything with is_relevant=true OR score > 20
+            is_relevant = data.get("is_relevant", False)
+            match_score = data.get("match_score", 0)
+            
+            # Convert string score to int if needed
+            if isinstance(match_score, str):
+                try:
+                    match_score = int(match_score)
+                except:
+                    match_score = 50  # Default if can't parse
+            
+            # Lower threshold - include more results and let user decide
             if is_relevant or match_score > 20:
                 data['url'] = url
                 data['source_title'] = title
@@ -383,12 +398,9 @@ def filter_results_by_preferences(results, preferences):
                     if key in uni_name:
                         if city == pref_location:
                             city_match = True
+                        else:
+                            pass 
                         break
-            
-            # If we identified the uni is definitely NOT in the city (by mapping)
-            # or if we are strict and didn't find the city
-            # Let's be semi-strict: If we matched a KNOWN uni and it's wrong city -> DROP
-            # If we didn't match any known uni -> Keep (give benefit of doubt or AI might have hallucinated name)
             
             detected_city = None
             for key, city in uni_cities.items():
