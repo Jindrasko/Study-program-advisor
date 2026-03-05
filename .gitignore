@@ -1,0 +1,37 @@
+# === SENSITIVE ===
+.env
+
+# === PYTHON ===
+__pycache__/
+*.py[cod]
+*.pyo
+*.pyd
+*.pyc
+*.egg
+*.egg-info/
+dist/
+build/
+.eggs/
+*.whl
+
+# === VIRTUAL ENVIRONMENTS ===
+venv/
+.venv/
+env/
+.env/
+ENV/
+
+# === IDE / EDITOR ===
+.idea/
+.vscode/
+*.swp
+*.swo
+*~
+
+# === OS FILES ===
+.DS_Store
+Thumbs.db
+desktop.ini
+
+# === PROJECT OUTPUT (generated files) ===
+report.md
